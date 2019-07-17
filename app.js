@@ -40,6 +40,9 @@ app.use(session({
   saveUninitialized: true
 }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Passport/Passport-Local Configuration
 passport.use(User.createStrategy());
 
