@@ -4,6 +4,7 @@ const session = require('express-session');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const methodOverride = require('method-override');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const User = require('./models/user');
@@ -25,13 +26,14 @@ db.once('open', () => {
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
+app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride('_method'));
 
 // Configure express-session
 app.use(session({
@@ -43,7 +45,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Passport/Passport-Local Configuration
+// Passport-Local Configuration
 passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
